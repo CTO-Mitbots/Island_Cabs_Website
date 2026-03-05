@@ -1,93 +1,141 @@
 "use client";
 
-import Link from "next/link";
+import { ChevronDown, Menu, X } from "lucide-react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import Link from "next/link";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
-import Button from "../ui/Button";
 
 export default function Header() {
-    const [open, setOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [servicesOpen, setServicesOpen] = useState(false);
 
-    const navItems = [
-        { label: "Home", href: "/" },
-        { label: "About", href: "/about-us" },
-        { label: "Explore", href: "/hire-cabs" },
-        { label: "Contact", href: "/contact-us" },
-    ];
+  return (
+    <header className="fixed top-0 w-full z-50 backdrop-blur-xl bg-white/70 border-b border-white/20 shadow-sm">
+      <div className="max-w-7xl mx-auto px-6 h-[72px] flex items-center justify-between">
+        {/* LOGO */}
+        <Link href="/" className="flex items-center gap-2">
+          <Image
+            src="/images/Hero/IslandLogo.png"
+            alt="Island Cabs Rameshwaram Taxi Service"
+            width={40}
+            height={40}
+          />
 
-    return (
-        <header className="fixed top-0 w-full z-50 backdrop-blur-xl bg-white/60 border-b border-white/20 shadow-sm">
-            <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 grid grid-cols-2 md:grid-cols-3 items-center">
+          <span className="text-xl font-bold text-[#0D276D]">Island Cabs</span>
+        </Link>
 
-                {/* Logo */}
-                <Link href="/" className="flex items-center gap-2">
-                    <Image
-                        src="/images/Hero/IslandLogo.png"
-                        alt="Island Cabs Logo"
-                        width={40}
-                        height={40}
-                        className="w-8 h-8 md:w-10 md:h-10 object-contain"
-                    />
-                    <span className="text-lg md:text-2xl font-bold text-[#0D276D]">
-                        Island Cabs
-                    </span>
+        {/* DESKTOP NAV */}
+        <nav className="hidden md:flex items-center gap-10 font-medium text-[#111827]">
+          <Link href="/">Home</Link>
+
+          <Link href="/about-us">About</Link>
+
+          {/* SERVICES DROPDOWN */}
+          <div
+            className="relative"
+            onMouseEnter={() => setServicesOpen(true)}
+            onMouseLeave={() => setServicesOpen(false)}
+          >
+            <button className="flex items-center gap-1 hover:text-[#0D276D]">
+              Cab Services
+              <ChevronDown size={16} />
+            </button>
+
+            {servicesOpen && (
+              <div className="absolute top-full mt-4 w-64 bg-white rounded-lg shadow-lg border p-4 flex flex-col gap-3">
+                <Link
+                  href="/cab-services"
+                  className="font-semibold text-[#0D276D]"
+                >
+                  All Cab Services
                 </Link>
 
-                {/* Desktop Nav */}
-                <nav className="hidden md:flex justify-center gap-10 text-[#111827] font-medium">
-                    {navItems.map((item, index) => (
-                        <Link key={index} href={item.href} className="hover:text-[#0D276D] transition">
-                            {item.label}
-                        </Link>
-                    ))}
-                </nav>
+                <Link href="/rameshwaram-to-madurai-taxi">
+                  Rameshwaram → Madurai Taxi
+                </Link>
 
-                {/* Right Section */}
-                <div className="flex justify-end items-center gap-3">
+                <Link href="/rameshwaram-to-kanyakumari-taxi">
+                  Rameshwaram → Kanyakumari Taxi
+                </Link>
 
-                    {/* Contact Us Button */}
-                    <Link
-                        href="/book-now"
-                        className="bg-[#0D276D] text-white text-xs md:text-base px-3 md:px-6 py-1.5 md:py-2 rounded-lg shadow-md hover:bg-[#6482B9] transition"
-                    >
-                        Book
-                    </Link>
-
-                    {/* Mobile Menu Icon */}
-                    <button
-                        className="md:hidden text-[#0D276D]"
-                        onClick={() => setOpen(!open)}
-                    >
-                        {open ? <X size={22} /> : <Menu size={22} />}
-                    </button>
-
-                </div>
-            </div>
-
-            {/* Mobile Dropdown */}
-            {open && (
-                <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    transition={{ duration: 0.25 }}
-                    className="md:hidden bg-white/60 backdrop-blur-xl shadow-sm"
-                >
-                    <div className="flex flex-col px-6 py-6 gap-6 text-[#111827] font-medium text-base">
-                        {navItems.map((item, index) => (
-                            <Link
-                                key={index}
-                                href={item.href}
-                                onClick={() => setOpen(false)}
-                                className="hover:text-[#0D276D] transition duration-200"
-                            >
-                                {item.label}
-                            </Link>
-                        ))}
-                    </div>
-                </motion.div>
+                <Link href="/rameshwaram-to-dhanushkodi-taxi">
+                  Rameshwaram → Dhanushkodi Taxi
+                </Link>
+              </div>
             )}
-        </header>
-    );
+          </div>
+
+          <Link href="/contact-us">Contact</Link>
+        </nav>
+
+        {/* CTA */}
+        <Link
+          href="/book-now"
+          className="hidden md:block bg-[#0D276D] text-white px-5 py-2 rounded-lg font-medium shadow-md hover:bg-[#6482B9]"
+        >
+          Request Booking
+        </Link>
+
+        {/* MOBILE MENU */}
+        <button
+          className="md:hidden text-[#0D276D]"
+          onClick={() => setMobileOpen(!mobileOpen)}
+        >
+          {mobileOpen ? <X size={26} /> : <Menu size={26} />}
+        </button>
+      </div>
+
+      {/* MOBILE NAV */}
+      {mobileOpen && (
+        <div className="md:hidden bg-white border-t">
+          <div className="flex flex-col px-6 py-6 gap-5 font-medium">
+            <Link href="/" onClick={() => setMobileOpen(false)}>
+              Home
+            </Link>
+
+            <Link href="/about-us" onClick={() => setMobileOpen(false)}>
+              About
+            </Link>
+
+            <Link href="/cab-services" onClick={() => setMobileOpen(false)}>
+              Cab Services
+            </Link>
+
+            <Link
+              href="/rameshwaram-to-madurai-taxi"
+              onClick={() => setMobileOpen(false)}
+            >
+              Rameshwaram → Madurai Taxi
+            </Link>
+
+            <Link
+              href="/rameshwaram-to-kanyakumari-taxi"
+              onClick={() => setMobileOpen(false)}
+            >
+              Rameshwaram → Kanyakumari Taxi
+            </Link>
+
+            <Link
+              href="/rameshwaram-to-dhanushkodi-taxi"
+              onClick={() => setMobileOpen(false)}
+            >
+              Rameshwaram → Dhanushkodi Taxi
+            </Link>
+
+            <Link href="/contact-us" onClick={() => setMobileOpen(false)}>
+              Contact
+            </Link>
+
+            <Link
+              href="/book-now"
+              onClick={() => setMobileOpen(false)}
+              className="bg-[#0D276D] text-white text-center py-3 rounded-lg"
+            >
+              Request Booking
+            </Link>
+          </div>
+        </div>
+      )}
+    </header>
+  );
 }
